@@ -2,6 +2,7 @@ pragma solidity 0.5.16;
 
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.3.0/contracts/token/ERC20/ERC20.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.3.0/contracts/token/ERC20/ERC20Detailed.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.3.0/contracts/math/SafeMath.sol";
 import "./IBorrower.sol";
 
@@ -9,7 +10,7 @@ import "./IBorrower.sol";
 // Allows for instant "FlashMints" that are akin to flash loans:
 // User can mint any number of tokens into their account for a single transaction, so long as they
 // are then burned before the end of the transaction.
-contract FlashMintableETH is ERC20 {
+contract FlashMintableETH is ERC20, ERC20Detailed("Flash-Mintable ETH", "fmETH", 18) {
 
     using SafeMath for uint256;
 
