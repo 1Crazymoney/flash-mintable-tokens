@@ -22,15 +22,15 @@ With FMTs, the user doesn't need to pay any fees to any lending pool. They aren'
 
 By the end of any external transaction, all flash-mintable tokens (FMTs) are guaranteed to be 1-to-1 backed by their underlying token.
 
-For example, at the end of every transaction, flash-mintable ETH (fmETH) is always backed 1-to-1 by ETH. The most basic way to mint a new fmETH token is to send 1 ETH to the fmETH contract. This mints one fmETH into existence and puts it in your account.
+For example, at the end of every transaction, flash-WETH (fWETH) is always backed 1-to-1 by ETH, just like regular WETH. The most basic way to mint a new fWETH token is to send 1 ETH to the fWETH contract. This mints one fWETH into existence, just as it would with regular WETH.
 
-At any time, you can redeem your fmETH token for 1 ETH. Just send the fmETH token back to the contract. It will burn the fmETH token and send you 1 ETH.
+At any time, you can redeem your fWETH token for 1 ETH. Just send the fWETH token back to the contract while calling the `withdraw` function. It will burn the fWETH token and send you 1 ETH.
 
 Simple. No fees. Trustless. Easy. No "pre mine". Truly fair. Etc.
 
-Similarly, flash-mintable DAI (fmDAI), flash-mintable REP (fmREP), and flash-mintable MKR (fmMKR) are each guaranteed to be backed 1-to-1 by DAI, REP, and MKR (respectively) at the beginning and end of every external transaction.
+Similarly, flash-mintable DAI (fDAI), flash-mintable REP (fREP), and flash-mintable MKR (fMKR) are each guaranteed to be backed 1-to-1 by DAI, REP, and MKR (respectively) at the beginning and end of every external transaction.
 
-As a result, FMTs should always maintain a market value approximately equal to their underlying tokens.
+As a result, FMTs should always maintain a market value equal to that of their underlying tokens.
 
 If the market price of an FMT drops below the market price of its underlying token, then arbitrageurs will simply buy the FMT on the open market and redeem it for the underlying.
 
@@ -72,6 +72,6 @@ By accepting FMTs, these platforms cut out the lending-pool middlemen and get di
 
 ## Platform integration
 
-And FMTs are just ERC20 tokens. There is no custom code that needs to be written to safely accept them. If your platform can accept wrapped ETH, then it can use the same code to accept fmETH.
+And FMTs are just ERC20 tokens. There is no custom code that needs to be written to safely accept them. If your platform can accept WETH, then it can use the same code to accept fWETH.
 
-Additionally, there is no need for a price oracle to measure the price of FMTs. They, just like their wrapped ETH counterparts, are worth precisely what their underlying token is worth. So, for example, platforms that require price oracles can use their already-existing ETH price oracle for the price of fmETH.
+Additionally, there is no need for a price oracle to measure the price of FMTs. They are simply wrappers around their underlying token. So, for example, platforms that require price oracles can use their already-existing ETH price oracle for the price of fWETH.
