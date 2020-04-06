@@ -5,28 +5,40 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.3
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.3.0/contracts/math/SafeMath.sol";
 import "./IBorrower.sol";
 
-// @notice A simple token backed 1-to-1 with ETH. So market price should be 1 fmETH == 1 ETH.
-// Allows for instant "FlashMints" that are akin to flash loans:
-// User can mint any number of tokens into their account for a single transaction, so long as they
-// are then burned before the end of the transaction.
-contract FlashMintableETH is ERC20 {
+// @title FlashWETH
+// @notice A simple ERC20 ETH-wrapper with flash-mint functionality.
+// @dev This is meant to be a drop-in replacement for WETH.
+contract FlashWETH is ERC20 {
 
     using SafeMath for uint256;
 
-    string public name = "Flash-Mintable ETH";
-    string public symbol = "fmETH";
-    uint8 public decimals = 18;
+    // ERC20-Detailed
+    string public name = "Flash WETH";
+    string public symbol = "fWETH";
+    uint8  public decimals = 18;
 
+    // Events with parameter names that are consistent with the WETH9 contract.
+    event Approval(address indexed src, address indexed guy, uint256 wad);
+    event Transfer(address indexed src, address indexed dst, uint256 wad);
+    event Deposit(address indexed dst, uint256 wad);
+    event Withdrawal(address indexed src, uint256 wad);
+    event FlashMint(address indexed src, uint256 wad);
 
-    // mints fmETH in 1-to-1 correspondence with ETH
-    function mint() public payable {
-        _mint(msg.sender, msg.value);
+    function () external payable {
+        deposit();
     }
 
-    // redeems fmETH 1-to-1 for ETH
-    function redeem(uint256 amount) public {
-        _burn(msg.sender, amount); // reverts if `msg.sender` does not have enough fmETH
-        msg.sender.transfer(amount);
+    // mints fWETH in 1-to-1 correspondence with ETH
+    function deposit() public payable {
+        _mint(msg.sender, msg.value);
+        emit Deposit(msg.sender, msg.value);
+    }
+
+    // redeems fWETH 1-to-1 for ETH
+    function withdraw(uint256 wad) public {
+        _burn(msg.sender, wad); // reverts if `msg.sender` does not have enough fWETH
+        msg.sender.transfer(wad);
+        emit Withdrawal(msg.sender, wad);
     }
 
     // allows anyone to mint an arbitrary number of tokens into their account for a single transaction
@@ -40,9 +52,11 @@ contract FlashMintableETH is ERC20 {
         IBorrower(msg.sender).executeOnFlashMint(amount);
 
         // burn tokens
-        _burn(msg.sender, amount); // reverts if `msg.sender` does not have enough fmETH
+        _burn(msg.sender, amount); // reverts if `msg.sender` does not have enough fWETH
 
         // sanity check (not strictly needed)
-        require(address(this).balance >= totalSupply(), "redeemability was broken");
+        assert(address(this).balance >= totalSupply()); // peg should never break
+
+        emit FlashMint(msg.sender, amount);
     }
 }
