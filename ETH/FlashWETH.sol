@@ -28,25 +28,23 @@ contract FlashWETH is ERC20 {
         deposit();
     }
 
-    // mints fWETH in 1-to-1 correspondence with ETH
+    // Mints fWETH in 1-to-1 correspondence with ETH.
     function deposit() public payable {
         _mint(msg.sender, msg.value);
         emit Deposit(msg.sender, msg.value);
     }
 
-    // redeems fWETH 1-to-1 for ETH
+    // Redeems fWETH 1-to-1 for ETH.
     function withdraw(uint256 wad) public {
         _burn(msg.sender, wad); // reverts if `msg.sender` does not have enough fWETH
         msg.sender.transfer(wad);
         emit Withdrawal(msg.sender, wad);
     }
 
-    // allows anyone to mint an arbitrary number of tokens into their account for a single transaction
-    // burns those tokens at the end of the transaction
-    // reverts if borrower account doesn't have enough tokens to burn by the end of the transaction
+    // Allows anyone to mint unbacked fWETH as long as it gets burned by the end of the transaction.
     function flashMint(uint256 amount) public {
-        // mint tokens and give to borrower
-        _mint(msg.sender, amount); // reverts if `amount` makes `_totalSupply` overflow
+        // mint tokens
+        _mint(msg.sender, amount);
 
         // hand control to borrower
         IBorrower(msg.sender).executeOnFlashMint(amount);
