@@ -2,15 +2,12 @@ pragma solidity 0.5.16;
 
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.3.0/contracts/token/ERC20/ERC20.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.3.0/contracts/math/SafeMath.sol";
 import "./IBorrower.sol";
 
 // @title FlashWETH
 // @notice A simple ERC20 ETH-wrapper with flash-mint functionality.
 // @dev This is meant to be a drop-in replacement for WETH.
 contract FlashWETH is ERC20 {
-
-    using SafeMath for uint256;
 
     // ERC20-Detailed
     string public name = "Flash WETH";
