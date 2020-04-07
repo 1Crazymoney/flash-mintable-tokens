@@ -184,4 +184,4 @@ If you think fWETH is unsafe or should not have _exactly_ the same value as ETH,
 
 The Exchange contract is on mainnet here: [0x5d84fC93A6a8161873a315C233Fbd79A88280079](https://etherscan.io/address/0x5d84fc93a6a8161873a315c233fbd79a88280079/advanced#code)
 
-To get you started in your bug hunt, you can find an "ExampleExchangeThief" contract in this repo. It has the boilerplate contract you would need to steal from the Exchange during a flash-mint-- if you think that's possible.
+To get you started in your bug hunt, you can find an "ExampleExchangeThief" contract in this repo. It has the boilerplate contract you would need to steal from the Exchange during a flash-mint -- if you think that's possible.
