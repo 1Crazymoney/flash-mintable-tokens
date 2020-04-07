@@ -6,19 +6,19 @@ import "./FlashMintableERC20.sol";
 
 contract Borrower is Ownable {
 
-    FlashMintableERC20 fmERC20 = FlashMintableERC20(address(0x0)); // address of FlashMintableERC20 contract
+    FlashERC20 fERC20 = FlashERC20(address(0x0)); // address of FlashERC20 contract
 
     function beginFlashMint(uint256 amount) public onlyOwner {
-        fmERC20.flashMint(amount);
+        fERC20.flashMint(amount);
     }
 
     function executeOnFlashMint(uint256 amount) public {
-        require(msg.sender == address(fmERC20), "only FlashMintableERC20 can execute");
+        require(msg.sender == address(fERC20), "only FlashERC20 can execute");
 
-        // When this executes, this contract will have `amount` more FMT tokens.
+        // When this executes, this contract will have `amount` more fERC20 tokens.
         // Do whatever you want with those tokens here.
-        // You can even redeem them for the underlying by calling `fmERC20.redeem(someAmount)`
-        // But you must make sure this contract holds at least `amount` FMT tokens before this function finishes executing
-        // or else the transaction will be reverted by the `FlashMintableERC20.flashMint` function.
+        // You can even redeem them for the underlying by calling `fERC20.withdraw(someAmount)`
+        // But you must make sure this contract holds at least `amount` fERC20 tokens before this function
+        // finishes executing or else the transaction will be reverted by the `FlashERC20.flashMint` function.
     }
 }
