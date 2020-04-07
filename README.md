@@ -155,11 +155,13 @@ Integrating `FlashWETH` into your project lets all of your users act like whales
 
 Instead of sending them off to some flash-lending pool somewhere, you can serve them directly. Save them gas and fees. Give them access to a virtually unbounded amount of money. Completely remove their dependence on third-party flash-lending platforms.
 
-Other platforms are using the "trustlessness of atomicity" to extend credit to your users via flash-loans, often charging them for the privilege. You can cut out those middlemen and give your users credit directly. And you can do it with no additional code. Your project doesn't need to have a big liquidity pool sitting around demanding yield. All you have to do is accept fWETH the same way you already accept WETH.
+Other platforms are using the "trustlessness of atomicity" to extend credit to your users via flash-loans, often charging them for the privilege. You can cut out those middlemen and give your users credit directly. And you can do it with no additional code. All you have to do is accept fWETH the same way you already accept WETH.
+
+Note that `fWETH` doesn't require liquidity pools like flash-loans do. Anything users can do on your platform using a $100M flash-loan from a third-party, they can also do using fWETH once you've integrate it -- even if the `FlashWETH` contract isn't holding very much ETH. Flash-mintable asset-backed tokens are _powerful_.
 
 ## How to integrate `FlashWETH` into your project
 
-The full version of the `FlashWETH` contract has been made to be a drop-in replacement for Wrapped Ether. If your project already has support for WETH you can use the exact same code for `FlashWETH`. The APIs are exactly the same. You do not need to make any modifications to your code. Just point to the `FlashWETH` contract instead of the `WETH9` contract.
+The `FlashWETH` contract has been made to be a drop-in replacement for Wrapped Ether. If your project already has support for WETH you can use the exact same code for `FlashWETH`. The APIs are exactly the same. You do not need to make any modifications to your code. Just point to the `FlashWETH` contract instead of the `WETH9` contract.
 
 If you want to use an ERC20 token as the asset that backs the token, check out the `FlashERC20` contract.
 
@@ -172,6 +174,6 @@ The Exchange contract will serve as a bug bounty and evidence that it is safe to
 - Will trade fWETH for an equal number of ETH (and vise versa).
 - Will accept all trades even during a `flashMint`.
 - Allows anyone to cause the exchange to internally rebalance however they want -- making the exchange trade its own fWETH for ETH or vise versa.
-- Will have some initial liquidity provided by me.
+- Will have some initial liquidity provided to serve as a bug bounty.
 
-If you think fWETH is unsafe or should not have _exactly_ the same value as ETH, then the Exchange contract will give you the opportunity to exploit that for profit. If there is _any difference at all_ between the value of ETH and fWETH, then you should be able to drain the Exchange contract of all of its value.
+If you think fWETH is unsafe or should not have _exactly_ the same value as ETH, even during a `flashMint`, then the Exchange contract will give you the opportunity to exploit that for profit. If there is _any difference at all_ between the value of ETH and fWETH, then you should be able to drain the Exchange contract of all of its value.
