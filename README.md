@@ -1,77 +1,164 @@
-# flash-mintable-tokens
+# Flash-mintable Asset-backed Tokens
 
 "Anyone can be rich for an instant." or "Perfect credit from atomicity."
 
 ## Warning
 
-This is a new and untested idea. The contracts are simple but have not been audited. Be careful.
+The contracts are simple but have not been audited. Be careful.
 
-## Flash-mintable tokens vs flash loans
+## What are flash-mintable tokens (FMTs)?
 
-With traditional flash loans, the user goes to the lending pool and says "I will borrow this money from you, and you I promise to pay it back before the end of this transaction." And the lending pool says "Because of the atomicity of transactions, we believe you. We will let you borrow our money." Then the user takes the money to, say, Compound and does whatever they want with it.
+Flash-mintable token (FMTs) are ERC20-compliant tokens that allow _flash minting_: the ability for anyone to mint an arbitrary number of new tokens into their account, as long as they also burn the same number of tokens from their account before the end of the same transaction.
 
-With Flash-mintable tokens (FMTs), we cut out the lending pool entirely. The user goes directly to Compound and says "I created these tokens out of thin air, but I promise that by the end of this transaction they will be 1-to-1 backed and instantly redeemable for real ETH." And so Compound can say, "Because of the atomicity of transactions, we believe you. We will accept your newly minted tokens as money and know that they will hold value by the end of this transaction."
+A minimal example FMT can be seen here:
 
-See the difference?
+```
+pragma solidity 0.5.16;
 
-FMTs are analogous to a credit card. You can run up as high a bill as you want (aka, flash mint as many tokens as you want) so long as you pay it off before the end of the transaction. There is no "credit limit" on the card. You can charge more money than exists in all lending pools combined, no problem. As long as you pay it back before the end of the transaction.
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.5.0/contracts/token/ERC20/ERC20.sol";
 
-With FMTs, the user doesn't need to pay any fees to any lending pool. They aren't limited in the number of tokens that exist in some lending pool. It is as if they have perfect credit and no credit limit.
+interface IBorrower {
+    function executeOnFlashMint(uint256 amount) external;
+}
 
-### How do FMTs maintain their value?
+contract FlashMintableToken is ERC20 {
 
-By the end of any external transaction, all flash-mintable tokens (FMTs) are guaranteed to be 1-to-1 backed by their underlying token.
+    function flashMint(uint256 amount) public {
+        // mint tokens
+        _mint(msg.sender, amount);
 
-For example, at the end of every transaction, flash-mintable ETH (fmETH) is always backed 1-to-1 by ETH. The most basic way to mint a new fmETH token is to send 1 ETH to the fmETH contract. This mints one fmETH into existence and puts it in your account.
+        // hand control to borrower
+        IBorrower(msg.sender).executeOnFlashMint(amount);
 
-At any time, you can redeem your fmETH token for 1 ETH. Just send the fmETH token back to the contract. It will burn the fmETH token and send you 1 ETH.
+        // burn tokens
+        _burn(msg.sender, amount); // reverts if `msg.sender` does not have enough units of the FMT
+    }
 
-Simple. No fees. Trustless. Easy. No "pre mine". Truly fair. Etc.
+}
+```
 
-Similarly, flash-mintable DAI (fmDAI), flash-mintable REP (fmREP), and flash-mintable MKR (fmMKR) are each guaranteed to be backed 1-to-1 by DAI, REP, and MKR (respectively) at the beginning and end of every external transaction.
+Any contract that implements the `IBorrower` interface can mint as many FMTs as they want, use them however they want (e.g.: for arbitrage or liquidating CDPs), so long as the same number of FMTs get burned from their account by the end of the transaction.
 
-As a result, FMTs should always maintain a market value approximately equal to their underlying tokens.
+You can think of FMTs as "credit tokens". Flash-minting FMTs is like "running up a tab", and burning the tokens at the end of the transaction is "paying off your tab". If you don't pay off your tab by the end of the transaction, then the transaction is reverted, and it is as if you never ran up a tab to begin with.
 
-If the market price of an FMT drops below the market price of its underlying token, then arbitrageurs will simply buy the FMT on the open market and redeem it for the underlying.
+Flash-minting is a powerful idea, but only if the tokens themselves have some value.
 
-If the market price of an FMT rises above the market price of its underlying token, arbitrageurs will simply mint more of the FMT (by sending the underlying to the FMT contract) and sell it on the open market for a profit.
+## What are asset-backed tokens?
+
+Asset-backed tokens are ERC20-compliant tokens that are 1-to-1 backed and trustlessly redeemable for some other asset. The canonical example is Wrapped Ether (WETH).
+
+Here is a minimal example of an asset-backed token (this is equivalent to WETH):
+
+```
+pragma solidity 0.5.16;
+
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.5.0/contracts/token/ERC20/ERC20.sol";
+
+contract WETH is ERC20 {
+
+    function deposit() public payable {
+        _mint(msg.sender, msg.value);
+    }
+
+    function withdraw(uint256 wad) public {
+        _burn(msg.sender, wad);
+        msg.sender.transfer(wad);
+    }
+}
+```
+
+As you can see, anyone can send an asset (ETH in this case) to the contract and receive one WETH token in return. The WETH token can be transferred and sold to anyone, just like any other ERC20 token.
+
+More importantly, anyone who holds a WETH token can instantly and trustlessly redeem it for one ETH by sending it back to the contract. This is what makes WETH an asset-backed token.
+
+The most important thing to know about asset-backed tokens is that **they have exactly the same market value as their underlying asset**. One WETH will always be worth exactly one ETH, and vice versa.
+
+## Flash-mintable asset-backed tokens
+
+A flash-mintable asset-backed token is exactly what it sounds like: an ERC20-compliant token that is:
+
+1. Asset-backed, so everyone can accept them at full face value knowing that they can always trustlessly redeem them for the underlying asset.
+
+2. Flash-mintable, so anyone can mint arbitrarily many unbacked-tokens and spend them at full face value, so long as they destroy all the unbacked tokens (and therefore restore the backing) before the end of the transaction.
 
 
-### How does flash minting work?
+Here is a minimal example using ETH as the underlying asset:
 
-There is a second way that you can mint flash-mintable tokens: Flash Minting, and this is where FMTs get all their power.
+```
+pragma solidity 0.5.16;
 
-Anyone can call the `flashMint` function and mint into their account any number of FMTs, provided that those FMTs are burned before the end of the transaction.
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.3.0/contracts/token/ERC20/ERC20.sol";
 
-Since the same number of tokens that are flash-minted must also be burned by the end of the transaction, the 1-to-1 backing is always restored by the end of the transaction. As a result, anyone who holds an FMT can be certain that -- by the end of any transaction -- the FMTs will be 1-to-1 redeemable for the underlying.
+interface IBorrower {
+    function executeOnFlashMint(uint256 amount) external;
+}
 
-So it is _always_ safe to accept an FMT, even during a flash mint transaction when there are potentially quadrillions more of them than there are underlying tokens backing them. You can be sure that any FMT you are holding will be redeemable for exactly one of its underlying tokens before and after any external transaction.
+contract BasicFlashWETH is ERC20 { // Flash-mintable WETH (fWETH)
 
-Nobody is ever at risk of being "left holding a bag". The 1-to-1 backing is fully restored by the end of any flash mint.
+    function deposit() public payable {
+        _mint(msg.sender, msg.value);
+    }
 
-If the flash-minter fails to burn the same number of tokens they minted before the end of the transaction, the transaction reverts (again, fully restoring the 1-to-1 backing).
+    function withdraw(uint256 wad) public {
+        _burn(msg.sender, wad);
+        msg.sender.transfer(wad);
+    }
 
-## Why would anybody accept FMTs?
+    function flashMint(uint256 amount) public {
+        // mint tokens
+        _mint(msg.sender, amount);
 
-Why would Uniswap, Compound, Synthetix, etc accept FMTs?
+        // hand control to borrower
+        IBorrower(msg.sender).executeOnFlashMint(amount);
 
-First lets answer a slightly different question: Why would any business accept Visa? Why would any pub extend a tab to Joe Sixpack? Why would any store extend credit to their customers?
+        // burn tokens
+        _burn(msg.sender, amount); // reverts if `msg.sender` does not have enough fWETH
 
-The answer is that accepting Visa allows the companies to do more business. Customers without up-front capital can buy things on credit, and pay the business back later. Joe can buy beer at the pub before he gets his paycheck.
+        // txn can never succeed unless all tokens are fully backed by ETH
+        assert(address(this).balance >= totalSupply());
+    }
 
-Allowing customers to use credit increases sales. Accepting Visa results in more business.
+}
+```
 
-Accepting FMTs is akin to accepting Visa, but even better because you can be _certain_ that the customer will fully pay off their entire debt before the end of the current transaction. You never have to worry about chargebacks or delinquent debt. You can accept FMTs with the same confidence that you wold accept wrapped ETH. At the end of any transaction, they will always be redeemable for exactly one unit of the underlying.
+Notice that it is impossible for a transaction to end with any fWETH tokens being unbacked by ETH.
 
-So the idea is that Uniswap, Compound, Synthetix, etc would integrate FMTs because doing so is a trustless way to get more business. Users who don't have any up-front capital would be able to use those platforms and exploit market inefficiencies. All of this extra action results in those platforms taking in more fees.
+This means that the only time the fWETH are ever unbacked is during the execution of a `flashMint`. To see that the fWETH tokens maintain their market value even during a `flashMint` -- when they are not all backed by ETH -- consider the following thought experiment.
 
-Currently, users without up-front capital need to crawl to a flash-lending pool first. They lose money to fees and they are limited in the amount of money they can borrow. These limitations mean some business that _could_ happen never _does_ happen. By _not_ accepting FMTs, these platforms would be leaving money on the table.
+Suppose you receive an fWETH token during a `flashMint` and consider the following cases:
 
-By accepting FMTs, these platforms cut out the lending-pool middlemen and get direct, efficient access to the users who have no up-front capital. The reap more platform fees as a benefit.
+#### Case 1: You try to redeem the fWETH during the `flashMint`
+If you try to redeem the fWETH for ETH by calling `withdraw()` during the execution of `flashMint` one of two things will happen:
+
+##### Case 1a: Your redeem succeeds
+If your attempt succeeds then you got exactly what the fWETH was worth (1 ETH). No problem here.
+
+##### Case 1b: Your redeem fails
+Then the transaction (including will revert, and it will be as though you never received the fWETH in the first place. No harm done. You are not left "holding a bag".
+
+#### Case 2: You do not try to redeem the fWETH during the `flashMint`
+If you do not try to redeem the fWETH for ETH during the same `flashMint` transaction, then either:
+
+##### Case 2a: The `flashMint` transaction goes on to succeed
+If the `flashMint` goes on to succeed, then the unbacked tokens all got burned, and so the fWETH token you are holding is fully backed. No problem here.
+
+##### Case 2b: The `flashMint` transaction goes on to fail
+If the `flashMint` goes on to fail, then the transaction will be reverted, and it will be as though you never accepted the fWETH to begin with. No harm done.
 
 
-## Platform integration
+In short, everyone can always accept fWETH at full face value because either it is instantly redeemable for ETH whenever they want, or else the EVM will revert and they'll have never accepted it in the first place.
 
-And FMTs are just ERC20 tokens. There is no custom code that needs to be written to safely accept them. If your platform can accept wrapped ETH, then it can use the same code to accept fmETH.
+## Why integrate `FlashWETH` into your project?
+Imagine if *all* of your users where whales.
 
-Additionally, there is no need for a price oracle to measure the price of FMTs. They, just like their wrapped ETH counterparts, are worth precisely what their underlying token is worth. So, for example, platforms that require price oracles can use their already-existing ETH price oracle for the price of fmETH.
+Integrating `FlashWETH` into your project lets all of your users act like whales. They can have access to as much money as they need to do whatever they want on your platform. If your project makes fees on volume, this is a no-brainer.
+
+Instead of sending them off to some flash-lending pool somewhere, you can serve them directly. Save them gas and fees. Give them access to a virtually unbounded amount of money. Completely remove their dependence on third-party flash-lending platforms.
+
+Other platforms are using the "trustlessness of atomicity" to extend credit to your users via flash-loans, often charging them for the privilege. You can cut out those middlemen and give your users credit directly. And you can do it with no additional code. Your project doesn't need to have a big liquidity pool sitting around demanding yield. All you have to do is accept fWETH the same way you already accept WETH.
+
+## How to integrate `FlashWETH` into your project
+
+The full version of the `FlashWETH` contract has been made to be a drop-in replacement for Wrapped Ether. If your project already has support for WETH you can use the exact same code for `FlashWETH`. The APIs are exactly the same. You do not need to make any modifications to your code. Just point to the `FlashWETH` contract instead of the `WETH9` contract.
+
+If you want to use an ERC20 token as the asset that backs the token, check out the `FlashERC20` contract.
