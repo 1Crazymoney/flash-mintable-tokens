@@ -8,4 +8,5 @@ interface IExchange {
     function internalSwapToFWETH(uint256) external;
     function ethBalance() external returns (uint256);
     function fwethBalance() external returns (uint256);
+    function fWETH() external returns (address);
 }

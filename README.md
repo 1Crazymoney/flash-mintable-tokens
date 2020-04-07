@@ -2,8 +2,8 @@
 
 "Anyone can be rich for an instant." or "Perfect credit from atomicity."
 
-The FlashWETH contract is on mainnet at: 0xf7705C1413CffCE6CfC0fcEfe3F3A12F38CB29dA
-The Exchange contract (bug bounty) is on mainnet at: 0x5d84fC93A6a8161873a315C233Fbd79A88280079
+The FlashWETH contract is on mainnet at: [0xf7705C1413CffCE6CfC0fcEfe3F3A12F38CB29dA](https://etherscan.io/address/0xf7705C1413CffCE6CfC0fcEfe3F3A12F38CB29dA)
+The Exchange contract (bug bounty) is on mainnet at: [0x5d84fC93A6a8161873a315C233Fbd79A88280079](https://etherscan.io/address/0x5d84fc93a6a8161873a315c233fbd79a88280079/advanced#code)
 
 ## Warning
 
@@ -181,4 +181,6 @@ The Exchange contract serves as a bug bounty and evidence that it is safe to tre
 
 If you think fWETH is unsafe or should not have _exactly_ the same value as ETH, even during a `flashMint`, then the Exchange contract will give you the opportunity to exploit that for profit. If there is _any difference at all_ between the value of ETH and fWETH, then you should be able to drain the Exchange contract of all of its value.
 
-The Exchange contract is on mainnet here: 0x5d84fC93A6a8161873a315C233Fbd79A88280079
+The Exchange contract is on mainnet here: [0x5d84fC93A6a8161873a315C233Fbd79A88280079](https://etherscan.io/address/0x5d84fc93a6a8161873a315c233fbd79a88280079/advanced#code)
+
+To get you started in your bug hunt, you can find an "ExampleExchangeThief" contract in this repo. It has the boilerplate contract you would need to steal from the Exchange during a flash-mint-- if you think that's possible.

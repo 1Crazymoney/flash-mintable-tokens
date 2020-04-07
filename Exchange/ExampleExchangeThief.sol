@@ -1,5 +1,6 @@
 pragma solidity 0.5.16;
-// an instance of this is deployed on mainnet at: 0x04694Cb369ABfc003c4f6f9EC8034362Fb8888d0
+
+// an instance of this is deployed on mainnet at: 0xa49CF38e51299579646a9a91f273972a791Cbaf8
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.3.0/contracts/ownership/Ownable.sol";
 import "./IFlashWETH.sol";
@@ -14,8 +15,8 @@ import "./IExchange.sol";
 // Exchange end's up being fully backed by real ETH. So there is no actual "theft" happening here.
 contract ExampleExchangeThief is Ownable {
 
-    IFlashWETH fWETH = IFlashWETH(0xf7705C1413CffCE6CfC0fcEfe3F3A12F38CB29dA); // address of FlashWETH contract
-    IExchange exchange = IExchange(0x5d84fC93A6a8161873a315C233Fbd79A88280079); // address of Exchange contract
+    IExchange public exchange = IExchange(0x5d84fC93A6a8161873a315C233Fbd79A88280079); // address of Exchange contract
+    IFlashWETH public fWETH = IFlashWETH(exchange.fWETH()); // address of FlashWETH contract
 
     // required to receive ETH in case you want to `withdraw` some fWETH for real ETH during `executeOnFlashMint`
     function () external payable {}
