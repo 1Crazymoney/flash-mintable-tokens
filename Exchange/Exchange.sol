@@ -12,7 +12,7 @@ contract Exchange {
     using SafeMath for uint256;
     using SafeERC20 for ERC20;
 
-    address constant public fWETH = address(0); // address of FlashWETH contract
+    address constant public fWETH = 0xf7705C1413CffCE6CfC0fcEfe3F3A12F38CB29dA; // address of FlashWETH contract
 
     // users get "credits" for depositing ETH or fWETH
     // credits can be redeemed for an equal number of ETH or fWETH

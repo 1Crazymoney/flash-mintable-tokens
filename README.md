@@ -2,6 +2,8 @@
 
 "Anyone can be rich for an instant." or "Perfect credit from atomicity."
 
+The FlashWETH contract is on mainnet at: 0xf7705C1413CffCE6CfC0fcEfe3F3A12F38CB29dA
+
 ## Warning
 
 The contracts are simple but have not been audited. Be careful.

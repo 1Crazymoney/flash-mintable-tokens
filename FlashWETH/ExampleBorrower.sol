@@ -6,7 +6,7 @@ import "./FlashWETH.sol";
 
 contract Borrower is Ownable {
 
-    FlashWETH fWETH = FlashWETH(address(0x0)); // address of FlashWETH contract
+    FlashWETH fWETH = FlashWETH(0xf7705C1413CffCE6CfC0fcEfe3F3A12F38CB29dA); // address of FlashWETH contract
 
     // required to receive ETH in case you want to `withdraw` some fWETH for real ETH during `executeOnFlashMint`
     function () external payable {}
