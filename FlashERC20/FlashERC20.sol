@@ -51,7 +51,7 @@ contract FlashERC20 is ERC20 {
         // burn tokens
         _burn(msg.sender, amount); // reverts if `msg.sender` does not have enough units of the FMT
 
-        // sanity check
+        // double-check that all fERC20 is backed by the underlying
         assert(underlying.balanceOf(address(this)) >= totalSupply());
 
         emit FlashMint(msg.sender, amount);
