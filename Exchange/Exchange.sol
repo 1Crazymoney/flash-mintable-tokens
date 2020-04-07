@@ -1,4 +1,5 @@
 pragma solidity 0.5.16;
+// deployed on mainnet at: 0x5d84fC93A6a8161873a315C233Fbd79A88280079
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.5.0/contracts/token/ERC20/ERC20.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.5.0/contracts/math/SafeMath.sol";
@@ -12,7 +13,7 @@ contract Exchange {
     using SafeMath for uint256;
     using SafeERC20 for ERC20;
 
-    address constant public fWETH = address(0); // address of FlashWETH contract
+    address constant public fWETH = 0xf7705C1413CffCE6CfC0fcEfe3F3A12F38CB29dA; // address of FlashWETH contract
 
     // users get "credits" for depositing ETH or fWETH
     // credits can be redeemed for an equal number of ETH or fWETH
@@ -85,7 +86,7 @@ contract Exchange {
     // =========
 
     function ethBalance() external view returns (uint256) { return address(this).balance; }
-    function fwethBalnce() external view returns (uint256) { return ERC20(fWETH).balanceOf(address(this)); }
+    function fwethBalance() external view returns (uint256) { return ERC20(fWETH).balanceOf(address(this)); }
 
 }
 
