@@ -4,6 +4,13 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.3
 import "./IFlashWETH.sol";
 import "./IExchange.sol";
 
+// @title ExampleExchangeThief
+// @notice An example contract that "exploits" the fact that the Exchange contract accepts
+// unbacked fWETH during flash-mints in exchange for ETH.
+// @dev This is just a boilerplate example to get bug-bounty hunters up and running.
+// @dev This contract flash-mints unbacked fWETH and uses it to buy all of the Exchange's ETH.
+// But since flash-minting requires burning the same number of fWETH that you minted, the fWETH held by the 
+// Exchange end's up being fully backed by real ETH. So there is no actual "theft" happening here.
 contract ExampleExchangeThief is Ownable {
 
     IFlashWETH fWETH = IFlashWETH(0xf7705C1413CffCE6CfC0fcEfe3F3A12F38CB29dA); // address of FlashWETH contract
