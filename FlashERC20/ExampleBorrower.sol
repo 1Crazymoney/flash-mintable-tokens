@@ -12,7 +12,7 @@ contract Borrower is Ownable {
         fERC20.flashMint(amount);
     }
 
-    function executeOnFlashMint(uint256 amount) public {
+    function executeOnFlashMint(uint256 amount) external {
         require(msg.sender == address(fERC20), "only FlashERC20 can execute");
 
         // When this executes, this contract will have `amount` more fERC20 tokens.

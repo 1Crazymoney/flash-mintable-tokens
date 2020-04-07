@@ -17,7 +17,7 @@ contract Borrower is Ownable {
     }
 
     // this is what executes during your flash mint
-    function executeOnFlashMint(uint256 amount) public {
+    function executeOnFlashMint(uint256 amount) external {
         require(msg.sender == address(fWETH), "only FlashWETH can execute");
 
         // When this executes, this contract will have `amount` more fWETH tokens.

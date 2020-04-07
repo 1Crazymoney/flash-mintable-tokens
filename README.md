@@ -1,4 +1,4 @@
-# flash-mintable-asset-backed-tokens
+# Flash-mintable Asset-backed Tokens
 
 "Anyone can be rich for an instant." or "Perfect credit from atomicity."
 
@@ -17,8 +17,8 @@ pragma solidity 0.5.16;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.5.0/contracts/token/ERC20/ERC20.sol";
 
-contract IBorrower {
-    function executeOnFlashMint(uint256 amount) public;
+interface IBorrower {
+    function executeOnFlashMint(uint256 amount) external;
 }
 
 contract FlashMintableToken is ERC20 {
@@ -89,8 +89,8 @@ pragma solidity 0.5.16;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.3.0/contracts/token/ERC20/ERC20.sol";
 
-contract IBorrower {
-    function executeOnFlashMint(uint256 amount) public;
+interface IBorrower {
+    function executeOnFlashMint(uint256 amount) external;
 }
 
 contract BasicFlashWETH is ERC20 { // Flash-mintable WETH (fWETH)
@@ -149,31 +149,16 @@ If the `flashMint` goes on to fail, then the transaction will be reverted, and i
 In short, everyone can always accept fWETH at full face value because either it is instantly redeemable for ETH whenever they want, or else the EVM will revert and they'll have never accepted it in the first place.
 
 ## Why integrate `FlashWETH` into your project?
+Imagine if *all* of your users where whales.
 
-Integrating `FlashWETH` into your project lets all of your users act like they are whales. If you make fees on volume, this is a no-brainer.
+Integrating `FlashWETH` into your project lets all of your users act like whales. They can have access to as much money as they need to do whatever they want on your platform. If your project makes fees on volume, this is a no-brainer.
 
-Instead of sending them off to some flash-lending pool somewhere, you can serve them directly. Save them gas and fees. Completely remove their dependence on other platforms.
+Instead of sending them off to some flash-lending pool somewhere, you can serve them directly. Save them gas and fees. Give them access to a virtually unbounded amount of money. Completely remove their dependence on third-party flash-lending platforms.
 
-Other platforms are using the "trustlessness of atomicity" to extend credit to your users via flash-loans, often charging them for the priveledge. You can cut out those middlemen and give your users credit directly. And you can do it with no additional code. All you have to do is accept fWETH the same way you already accept WETH.
+Other platforms are using the "trustlessness of atomicity" to extend credit to your users via flash-loans, often charging them for the priveledge. You can cut out those middlemen and give your users credit directly. And you can do it with no additional code. Your project doesn't need to have a big liquidity pool sitting around demanding yield. All you have to do is accept fWETH the same way you already accept WETH.
 
 ## How to integrate `FlashWETH` into your project
 
-The full version of the `FlashWETH` contract has been made to be a drop-in replacement for wrapped ether. If your project already has support for WETH you can use the exact same code for `FlashWETH`. The APIs are exactly the same. You do not need to make any modifications to your code. Just point to the `FlashWETH` contract instead of the `WETH9` contract.
+The full version of the `FlashWETH` contract has been made to be a drop-in replacement for Wrapped Ether. If your project already has support for WETH you can use the exact same code for `FlashWETH`. The APIs are exactly the same. You do not need to make any modifications to your code. Just point to the `FlashWETH` contract instead of the `WETH9` contract.
 
 If you want to use an ERC20 token as the asset that backs the token, check out the `FlashERC20` contract.
-
-## Bug Bounty
-[COMING SOON]
-
-If you think fWETH and ETH should have different market prices, then you'll soon be able to prove it and make some money.
-
-COMING SOON: A very basic constant-sum "market contract" that will hold ETH and fWETH (and possibly regular WETH). The market contract will:
-
-1. Let anyone sell fWETH for an equal amount of ETH.
-2. Let anyone sell ETH for an equal amount of fWETH.
-3. Allow anyone to internally rebalance the market contract (in case it is holding too much ETH and they want to buy fWETH, or vise versa).
-4. Have no fees and no slippage (other than gas).
-5. Accept all trades, even during `flashMints`.
-
-If you think you can make 1 fWETH != 1 ETH then you'll be able to drain the contract. Consider it a bug bounty.
-
