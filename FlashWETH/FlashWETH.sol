@@ -49,8 +49,8 @@ contract FlashWETH is ERC20 {
         // burn tokens
         _burn(msg.sender, amount); // reverts if `msg.sender` does not have enough fWETH
 
-        // sanity check (not strictly needed)
-        assert(address(this).balance >= totalSupply()); // peg should never break
+        // double-check that all fWETH is backed by ETH
+        assert(address(this).balance >= totalSupply());
 
         emit FlashMint(msg.sender, amount);
     }
