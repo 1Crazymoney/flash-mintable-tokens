@@ -3,6 +3,7 @@
 "Anyone can be rich for an instant." or "Perfect credit from atomicity."
 
 The FlashWETH contract is on mainnet at: 0xf7705C1413CffCE6CfC0fcEfe3F3A12F38CB29dA
+The Exchange contract (bug bounty) is on mainnet at: 0x5d84fC93A6a8161873a315C233Fbd79A88280079
 
 ## Warning
 

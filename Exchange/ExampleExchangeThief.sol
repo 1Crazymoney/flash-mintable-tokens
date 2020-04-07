@@ -7,7 +7,7 @@ import "./IExchange.sol";
 contract ExampleExchangeThief is Ownable {
 
     IFlashWETH fWETH = IFlashWETH(0xf7705C1413CffCE6CfC0fcEfe3F3A12F38CB29dA); // address of FlashWETH contract
-    IExchange exchange = IExchange(address(0)); // address of Exchange contract
+    IExchange exchange = IExchange(0x5d84fC93A6a8161873a315C233Fbd79A88280079); // address of Exchange contract
 
     // required to receive ETH in case you want to `withdraw` some fWETH for real ETH during `executeOnFlashMint`
     function () external payable {}
