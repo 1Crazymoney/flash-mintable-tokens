@@ -155,7 +155,7 @@ Integrating `FlashWETH` into your project lets all of your users act like whales
 
 Instead of sending them off to some flash-lending pool somewhere, you can serve them directly. Save them gas and fees. Give them access to a virtually unbounded amount of money. Completely remove their dependence on third-party flash-lending platforms.
 
-Other platforms are using the "trustlessness of atomicity" to extend credit to your users via flash-loans, often charging them for the priveledge. You can cut out those middlemen and give your users credit directly. And you can do it with no additional code. Your project doesn't need to have a big liquidity pool sitting around demanding yield. All you have to do is accept fWETH the same way you already accept WETH.
+Other platforms are using the "trustlessness of atomicity" to extend credit to your users via flash-loans, often charging them for the privilege. You can cut out those middlemen and give your users credit directly. And you can do it with no additional code. Your project doesn't need to have a big liquidity pool sitting around demanding yield. All you have to do is accept fWETH the same way you already accept WETH.
 
 ## How to integrate `FlashWETH` into your project
 
