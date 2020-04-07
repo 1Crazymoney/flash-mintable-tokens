@@ -170,7 +170,7 @@ If you want to use an ERC20 token as the asset that backs the token, check out t
 
 ## Bug Bounty
 
-The Exchange contract will serve as a bug bounty and evidence that it is safe to treat fWETH exactly like regular WETH. It is a "constant sum" market between ETH and fWETH. The Exchange:
+The Exchange contract serves as a bug bounty and evidence that it is safe to treat fWETH exactly like regular WETH. It is a "constant sum" market between ETH and fWETH. The Exchange:
 
 - Has no fees (other than gas).
 - Has no slippage.
@@ -180,3 +180,5 @@ The Exchange contract will serve as a bug bounty and evidence that it is safe to
 - Will have some initial liquidity provided to serve as a bug bounty.
 
 If you think fWETH is unsafe or should not have _exactly_ the same value as ETH, even during a `flashMint`, then the Exchange contract will give you the opportunity to exploit that for profit. If there is _any difference at all_ between the value of ETH and fWETH, then you should be able to drain the Exchange contract of all of its value.
+
+The Exchange contract is on mainnet here: 0x5d84fC93A6a8161873a315C233Fbd79A88280079
