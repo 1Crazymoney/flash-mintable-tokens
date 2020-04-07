@@ -162,3 +162,16 @@ Other platforms are using the "trustlessness of atomicity" to extend credit to y
 The full version of the `FlashWETH` contract has been made to be a drop-in replacement for Wrapped Ether. If your project already has support for WETH you can use the exact same code for `FlashWETH`. The APIs are exactly the same. You do not need to make any modifications to your code. Just point to the `FlashWETH` contract instead of the `WETH9` contract.
 
 If you want to use an ERC20 token as the asset that backs the token, check out the `FlashERC20` contract.
+
+## Bug Bounty
+
+The Exchange contract will serve as a bug bounty and evidence that it is safe to treat fWETH exactly like regular WETH. It is a "constant sum" market between ETH and fWETH. The Exchange:
+
+- Has no fees (other than gas).
+- Has no slippage.
+- Will trade fWETH for an equal number of ETH (and vise versa).
+- Will accept all trades even during a `flashMint`.
+- Allows anyone to cause the exchange to internally rebalance however they want -- making the exchange trade its own fWETH for ETH or vise versa.
+- Will have some initial liquidity provided by me.
+
+If you think fWETH is unsafe or should not have _exactly_ the same value as ETH, then the Exchange contract will give you the opportunity to exploit that for profit. If there is _any difference at all_ between the value of ETH and fWETH, then you should be able to drain the Exchange contract of all of its value.
