@@ -85,7 +85,7 @@ contract Exchange {
     // =========
 
     function ethBalance() external view returns (uint256) { return address(this).balance; }
-    function fwethBalnce() external view returns (uint256) { return ERC20(fWETH).balanceOf(address(this)); }
+    function fwethBalance() external view returns (uint256) { return ERC20(fWETH).balanceOf(address(this)); }
 
 }
 
