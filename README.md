@@ -4,6 +4,8 @@
 
 A video recording of a 1-hour presentation on this project can be found [here](https://zoom.us/rec/play/vpUsd-2uqG83H4KV4wSDV_QqW9W8eq6sgyYa__dbyxmxU3JQZlGgNOQWa7YCcdGL7KuPjJmmffLXrHeV?continueMode=true&_x_zm_rtaid=bOcPBuGvSXKBX4e8HeUYmA.1586903684079.752b46c2abd76976551dd088fa79a2a9&_x_zm_rhtaid=116).
 
+Slides for that presentation can be found [here](https://docs.google.com/presentation/d/1E3Uuoj4DYEWGWpV2PzY1a8I86nCbgo52xL7xhNvNVj8/edit?usp=sharing).
+
 The FlashWETH contract is on mainnet at: [0xf7705C1413CffCE6CfC0fcEfe3F3A12F38CB29dA](https://etherscan.io/address/0xf7705C1413CffCE6CfC0fcEfe3F3A12F38CB29dA)
 
 The Exchange contract (bug bounty) is on mainnet at: [0x5d84fC93A6a8161873a315C233Fbd79A88280079](https://etherscan.io/address/0x5d84fc93a6a8161873a315c233fbd79a88280079/advanced#code)
