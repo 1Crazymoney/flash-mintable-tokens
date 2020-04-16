@@ -142,7 +142,7 @@ If you try to redeem the fWETH for ETH by calling `withdraw()` during the execut
 If your attempt succeeds then you got exactly what the fWETH was worth (1 ETH). No problem here.
 
 ##### Case 1b: Your redeem fails
-Then the transaction (including will revert, and it will be as though you never received the fWETH in the first place. No harm done. You are not left "holding a bag".
+Then the transaction will revert, and it will be as though you never received the fWETH in the first place. No harm done. You are not left "holding a bag".
 
 #### Case 2: You do not try to redeem the fWETH during the `flashMint`
 If you do not try to redeem the fWETH for ETH during the same `flashMint` transaction, then either:
@@ -165,7 +165,7 @@ Instead of sending them off to some flash-lending pool somewhere, you can serve 
 
 Other platforms are using the "trustlessness of atomicity" to extend credit to your users via flash-loans, often charging them for the privilege. You can cut out those middlemen and give your users credit directly. And you can do it with no additional code. All you have to do is accept fWETH the same way you already accept WETH.
 
-Note that `fWETH` doesn't require liquidity pools like flash-loans do. Anything users can do on your platform using a $100M flash-loan from a third-party, they can also do using fWETH once you've integrate it -- even if the `FlashWETH` contract isn't holding very much ETH. Flash-mintable asset-backed tokens are _powerful_.
+Note that fWETH doesn't require liquidity pools like flash-loans do. Anything users can do on your platform using a $100M flash-loan from a third-party, they can also do using fWETH once you've integrate it -- even if the `FlashWETH` contract isn't holding very much ETH. Flash-mintable asset-backed tokens are _powerful_.
 
 ## How to integrate `FlashWETH` into your project
 
