@@ -8,7 +8,7 @@ Slides for that presentation can be found [here](https://docs.google.com/present
 
 The FlashWETH contract is on mainnet at: [0xf7705C1413CffCE6CfC0fcEfe3F3A12F38CB29dA](https://etherscan.io/address/0xf7705C1413CffCE6CfC0fcEfe3F3A12F38CB29dA)
 
-The Exchange contract (bug bounty) is on mainnet at: [0x5d84fC93A6a8161873a315C233Fbd79A88280079](https://etherscan.io/address/0x5d84fc93a6a8161873a315c233fbd79a88280079/advanced#code)
+The Exchange contract is on mainnet at: [0x5d84fC93A6a8161873a315C233Fbd79A88280079](https://etherscan.io/address/0x5d84fc93a6a8161873a315c233fbd79a88280079/advanced#code)
 
 ## Warning
 
@@ -189,3 +189,5 @@ If you think fWETH is unsafe or should not have _exactly_ the same value as ETH,
 The Exchange contract is on mainnet here: [0x5d84fC93A6a8161873a315C233Fbd79A88280079](https://etherscan.io/address/0x5d84fc93a6a8161873a315c233fbd79a88280079/advanced#code)
 
 To get you started in your bug hunt, you can find an "ExampleExchangeThief" contract in this repo. It has the boilerplate contract you would need to steal from the Exchange during a flash-mint -- if you think that's possible.
+
+UPDATE: Due to a lack of attempts to steal it, I've removed the ETH bug bounty from the exchange contracts and put them towards other projects. If you are convinced that you could steal ETH from the exchange contract and want to give it a shot, then open an issue and let me know. I'll throw some money back in there for you to try to steal.
